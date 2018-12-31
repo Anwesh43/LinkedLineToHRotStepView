@@ -209,4 +209,13 @@ class LineToHRotStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : LineToHRotStepView {
+            val view : LineToHRotStepView = LineToHRotStepView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }

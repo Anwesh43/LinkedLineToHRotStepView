@@ -186,4 +186,25 @@ class LineToHRotStepView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : LineToHRotStepView) {
+        private val lhrs : LineToHRotStep = LineToHRotStep(0)
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            lhrs.draw(canvas, paint)
+            animator.animate {
+                lhrs.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            lhrs.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }

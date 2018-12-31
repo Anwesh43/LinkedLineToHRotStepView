@@ -20,6 +20,7 @@ val scDiv : Double = 0.51
 val scGap : Float = 0.05f
 val backColor : Int = Color.parseColor("#212121")
 val strokeColor : Int = Color.parseColor("#f44336")
+val DELAY : Long = 25
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse()).toFloat()
@@ -100,7 +101,7 @@ class LineToHRotStepView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(DELAY)
                     view.invalidate()
                 } catch(ex : Exception) {
 
@@ -215,7 +216,7 @@ class LineToHRotStepView(ctx : Context) : View(ctx) {
         fun create(activity : Activity) : LineToHRotStepView {
             val view : LineToHRotStepView = LineToHRotStepView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }

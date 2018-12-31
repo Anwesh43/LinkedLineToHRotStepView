@@ -21,6 +21,7 @@ val scGap : Float = 0.05f
 val backColor : Int = Color.parseColor("#212121")
 val strokeColor : Int = Color.parseColor("#f44336")
 val DELAY : Long = 25
+val rFactor : Int = 5
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse()).toFloat()
@@ -36,6 +37,7 @@ fun Canvas.drawLHRSNode(i : Int, scale : Float, paint : Paint) {
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
     val size : Float = gap / sizeFactor
+    val r : Float = size / rFactor
     paint.strokeCap = Paint.Cap.ROUND
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.color = strokeColor
@@ -43,14 +45,21 @@ fun Canvas.drawLHRSNode(i : Int, scale : Float, paint : Paint) {
     translate(gap * (i + 1), h/2)
     rotate(90f * sc2)
     drawLine(0f, -size/2, 0f, size/2, paint)
-    drawCircle(0f, 0f, size/7, paint)
-    for(j in (0..(lines - 1))) {
+    drawCircle(0f, 0f, r, paint)
+    for (j in 0..((lines/2) - 1)) {
         val sf : Float = 1f - 2 * j
-        val sc : Float = sc1.divideScale(j, lines)
+        val scj : Float = sc1.divideScale(j, (lines/2))
         save()
-        translate(0f, size/2 * sf)
-        rotate(90f * sc * sf)
-        drawLine(0f, 0f, 0f, -size * sf, paint)
+        scale(sf, 1f)
+        for (k in 0..((lines/2) - 1)) {
+            val sck : Float = scj.divideScale(k, (lines/2))
+            val sk : Float = 1f - 2 * k
+            save()
+            translate(0f, size/2 * sk)
+            rotate(90f * sk * sck)
+            drawLine(0f, 0f, 0f, -size * sk, paint)
+            restore()
+        }
         restore()
     }
     restore()

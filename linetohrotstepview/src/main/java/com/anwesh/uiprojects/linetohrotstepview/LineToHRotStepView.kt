@@ -28,3 +28,30 @@ fun Float.scaleFactor() : Float = Math.floor(this / scDiv).toFloat()
 fun Float.mirrorValue(a : Int, b : Int) : Float = (1 - scaleFactor()) * a.inverse() + scaleFactor() * b.inverse()
 fun Float.updateScale(dir : Float, a : Int, b : Int) : Float = mirrorValue(a, b) * scGap * dir
 
+fun Canvas.drawLHRSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val size : Float = gap / sizeFactor
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
+    paint.color = strokeColor
+    save()
+    translate(gap * (i + 1), h/2)
+    rotate(90f * sc2)
+    drawLine(0f, -size/2, 0f, size/2, paint)
+    drawCircle(0f, 0f, size/7, paint)
+    for(j in (0..(lines - 1))) {
+        val sf : Float = 1f - 2 * j
+        val sc : Float = sc1.divideScale(j, lines)
+        save()
+        translate(0f, size/2 * sf)
+        rotate(90f * sc * sf)
+        drawLine(0f, 0f, 0f, -size * sf, paint)
+        restore()
+    }
+    restore()
+}
+
